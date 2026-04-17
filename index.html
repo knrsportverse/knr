@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KNR SPORTVERSE - All Sports Live</title>
+    <!-- Font Awesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Light Mode Colors - Blue Theme */
+            --primary-blue: #1e88e5;
+            --primary-dark-blue: #1565c0;
+            --secondary-blue: #42a5f5;
+            --light-blue: #e3f2fd;
+            --text-dark: #1a1a1a;
+            --text-light: #666666;
+            --bg-light: #f5f7fa;
+            --bg-card: #ffffff;
+            --shadow-light: rgba(30, 136, 229, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+            --header-bg: #0d1b2a;
+            --footer-bg: #1a1a1a;
+            --status-live: #e74c3c;
+            --status-upcoming: #9b9b9b;
+            --border-color: #e0e0e0;
+            
+            /* Dark Mode Colors */
+            --dark-text: #f0f0f0;
+            --dark-bg: #0a0e27;
+            --dark-bg-card: #1a1f3a;
+            --dark-shadow: rgba(30, 136, 229, 0.15);
+            --dark-header-bg: #0a0d16;
+            --dark-footer-bg: #0d0f1a;
+            --dark-border-color: #2a3a4a;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        /* ==================== HEADER STYLES ==================== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--header-bg) 0%, #1a2332 100%);
+            color: #fff;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 4px 20px rgba(30, 136, 229, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode .header {
+            background: linear-gradient(135deg, var(--dark-header-bg) 0%, #111827 100%);
+            box-shadow: 0 4px 20px rgba(30, 136, 229, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-left i {
+            font-size: 2.2rem;
+            color: var(--primary-blue);
+            filter: drop-shadow(0 0 5px rgba(30, 136, 229, 0.3));
+        }
+
+        .header-left h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1.5px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .refresh-btn,
+        .theme-toggle-btn {
+            background-color: var(--primary-blue);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.2);
+        }
+
+        .theme-toggle-btn:hover,
+        .refresh-btn:hover {
+            background-color: var(--primary-dark-blue);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(30, 136, 229, 0.4);
+        }
+
+        .theme-toggle-btn:active,
+        .refresh-btn:active {
+            transform: scale(0.95);
+        }
+
+        body.dark-mode .refresh-btn,
+        body.dark-mode .theme-toggle-btn {
+            background-color: var(--primary-blue);
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+        }
+
+        /* ==================== HERO BANNER ==================== */
+        .hero-banner {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark-blue) 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="20" opacity="0.1"/><circle cx="80" cy="80" r="30" opacity="0.1"/></svg>');
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content h2 span {
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            letter-spacing: 0.5px;
+        }
+
+        body.dark-mode .hero-banner {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e88e5 100%);
+        }
+
+        /* ==================== FEED CONTAINER ==================== */
+        .feed-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .feed-header h2 {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        body.dark-mode .feed-header h2 {
+            color: var(--secondary-blue);
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.65rem 1.5rem;
+            border: 2px solid var(--primary-blue);
+            background-color: transparent;
+            color: var(--primary-blue);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-btn:hover {
+            background-color: var(--light-blue);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-blue);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+        }
+
+        body.dark-mode .filter-btn {
+            border-color: var(--primary-blue);
+            color: var(--secondary-blue);
+        }
+
+        body.dark-mode .filter-btn:hover {
+            background-color: rgba(66, 165, 245, 0.1);
+        }
+
+        body.dark-mode .filter-btn.active {
+            background-color: var(--primary-blue);
+            color: #fff;
+        }
+
+        #feed-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2.5rem;
+            min-height: 200px;
+        }
+
+        .empty-feed {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: #999;
+        }
+
+        /* ==================== FEED CARD TEMPLATE ==================== */
+        .feed-card {
+            background-color: var(--bg-card);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(30, 136, 229, 0.1);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(30, 136, 229, 0.1);
+        }
+
+        body.dark-mode .feed-card {
+            background-color: var(--dark-bg-card);
+            box-shadow: 0 4px 20px rgba(30, 136, 229, 0.15);
+            border-color: rgba(30, 136, 229, 0.2);
+        }
+
+        .feed-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 12px 35px rgba(30, 136, 229, 0.25);
+        }
+
+        body.dark-mode .feed-card:hover {
+            box-shadow: 0 12px 35px rgba(30, 136, 229, 0.3);
+        }
+
+        .feed-card-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--light-blue) 0%, #e0e7ff 100%);
+        }
+
+        .feed-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .feed-card:hover .feed-card-image {
+            transform: scale(1.08);
+        }
+
+        .feed-card-status-badge {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-live {
+            background-color: rgba(231, 76, 60, 0.95);
+            color: #fff;
+        }
+
+        .status-upcoming {
+            background-color: rgba(155, 155, 155, 0.95);
+            color: #fff;
+        }
+
+        .feed-card-content {
+            padding: 1.8rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feed-card-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        body.dark-mode .feed-card-name {
+            color: var(--dark-text);
+        }
+
+        .feed-card-name i {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+        }
+
+        .feed-card-description {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        body.dark-mode .feed-card-description {
+            color: #a0aec0;
+        }
+
+        .feed-card-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: var(--text-light);
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        body.dark-mode .feed-card-info {
+            color: #a0aec0;
+        }
+
+        .feed-card-info i {
+            color: var(--primary-blue);
+            font-size: 1rem;
+            margin-right: 0.4rem;
+        }
+
+        .feed-card-link-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.2);
+        }
+
+        .feed-card-link-btn:hover {
+            transform: translateX(3px);
+            box-shadow: 0 6px 20px rgba(30, 136, 229, 0.4);
+        }
+
+        .feed-card-link-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ==================== SCROLL TO TOP BUTTON ==================== */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark-blue) 100%);
+            color: #fff;
+            border: none;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            box-shadow: 0 6px 20px rgba(30, 136, 229, 0.3);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 999;
+        }
+
+        .scroll-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(30, 136, 229, 0.4);
+        }
+
+        .scroll-to-top:active {
+            transform: scale(0.95);
+        }
+
+        .scroll-percentage {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        body.dark-mode .scroll-to-top {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #1565c0 100%);
+            box-shadow: 0 6px 20px rgba(30, 136, 229, 0.4);
+        }
+
+        /* ==================== FOOTER STYLES ==================== */
+        .footer {
+            background-color: var(--footer-bg);
+            color: #fff;
+            padding: 3.5rem 2rem 2rem;
+            margin-top: 4rem;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .footer {
+            background-color: var(--dark-footer-bg);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3,
+        .footer-section h4 {
+            color: var(--primary-blue);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            margin: 0.75rem 0;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .footer-section a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .footer-section a:hover {
+            color: var(--secondary-blue);
+            text-decoration: underline;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: rgba(30, 136, 229, 0.15);
+            color: var(--primary-blue);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(30, 136, 229, 0.3);
+            font-size: 1.2rem;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--primary-blue);
+            color: #fff;
+            transform: scale(1.15) translateY(-3px);
+            border-color: var(--primary-blue);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(30, 136, 229, 0.2);
+            padding-top: 1.5rem;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* ==================== RESPONSIVE DESIGN ==================== */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem 1.2rem;
+                gap: 0.75rem;
+            }
+
+            .header-left h1 {
+                font-size: 1.4rem;
+            }
+
+            .header-left i {
+                font-size: 1.8rem;
+            }
+
+            .refresh-btn,
+            .theme-toggle-btn {
+                padding: 0.6rem 0.9rem;
+                font-size: 1rem;
+            }
+
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .feed-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .feed-header h2 {
+                font-size: 1.6rem;
+            }
+
+            .filter-options {
+                width: 100%;
+                gap: 0.75rem;
+            }
+
+            .filter-btn {
+                flex: 1;
+                font-size: 0.9rem;
+                padding: 0.55rem 1rem;
+            }
+
+            #feed-content {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 1.75rem;
+            }
+
+            .feed-card-name {
+                font-size: 1.2rem;
+            }
+
+            .feed-card-content {
+                padding: 1.2rem;
+            }
+
+            .scroll-to-top {
+                bottom: 1.5rem;
+                left: 1.5rem;
+                width: 60px;
+                height: 60px;
+                font-size: 1.3rem;
+            }
+
+            .scroll-percentage {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-left h1 {
+                font-size: 1.2rem;
+            }
+
+            .header-left i {
+                font-size: 1.5rem;
+            }
+
+            .header-right {
+                gap: 0.5rem;
+            }
+
+            .hero-banner {
+                padding: 2.5rem 1.2rem;
+            }
+
+            .hero-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .hero-content p {
+                font-size: 0.95rem;
+            }
+
+            /* FIXED LOGIC: 2 Items per row on mobile */
+            #feed-content {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            /* Reduced spacing and sizing to accommodate 2 cards side-by-side */
+            .feed-card-image-wrapper {
+                height: 120px;
+            }
+
+            .feed-card-content {
+                padding: 0.75rem;
+            }
+
+            .feed-card-name {
+                font-size: 0.95rem;
+                margin-bottom: 0.5rem;
+                gap: 0.4rem;
+            }
+
+            .feed-card-name i {
+                font-size: 1rem;
+            }
+
+            .feed-card-description {
+                font-size: 0.75rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .feed-card-info {
+                font-size: 0.75rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .feed-card-link-btn {
+                padding: 0.6rem;
+                font-size: 0.85rem;
+            }
+
+            .feed-card-status-badge {
+                top: 0.5rem;
+                right: 0.5rem;
+                font-size: 0.65rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .feed-header h2 {
+                font-size: 1.4rem;
+            }
+
+            .filter-btn {
+                font-size: 0.8rem;
+                padding: 0.5rem 0.8rem;
+            }
+
+            .feed-container {
+                padding: 0 1rem;
+                margin: 2rem auto;
+            }
+
+            .scroll-to-top {
+                bottom: 1rem;
+                left: 1rem;
+                width: 55px;
+                height: 55px;
+                font-size: 1.2rem;
+            }
+
+            .footer-section h3,
+            .footer-section h4 {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feed-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Smooth scrollbar for modern browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-light);
+        }
+
+        body.dark-mode ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark-blue);
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-left">
+            <i class="fas fa-play-circle"></i>
+            <h1>KNR SPORTVERSE</h1>
+        </div>
+        <div class="header-right">
+            <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                <i class="fas fa-sun"></i>
+            </button>
+            <button class="refresh-btn" onclick="location.reload()" title="Refresh Page">
+                <i class="fas fa-redo-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+        <div class="hero-content">
+            <h2>Welcome to <span>KNR SPORTVERSE</span></h2>
+            <p>Your Ultimate Destination for Live Sports & Events</p>
+        </div>
+    </div>
+
+    <!-- FEED CONTAINER -->
+    <main class="feed-container">
+        <div class="feed-header">
+            <h2>Live Events & Upcoming Matches</h2>
+            <div class="filter-options">
+                <!-- FIXED LOGIC: Added 'this' parameter so Javascript knows which button was clicked -->
+                <button class="filter-btn active" onclick="filterFeed('all', this)">
+                    <i class="fas fa-list"></i> All
+                </button>
+                <button class="filter-btn" onclick="filterFeed('live', this)">
+                    <i class="fas fa-circle"></i> Live
+                </button>
+                <button class="filter-btn" onclick="filterFeed('upcoming', this)">
+                    <i class="fas fa-hourglass-end"></i> Upcoming
+                </button>
+            </div>
+        </div>
+        <div id="feed-content">
+            <!-- Feed items will be dynamically added here -->
+        </div>
+    </main>
+
+    <!-- SCROLL TO TOP BUTTON -->
+    <button class="scroll-to-top" id="scrollTopBtn" onclick="scrollToTop()" title="Scroll to Top">
+        <i class="fas fa-arrow-up"></i>
+        <span class="scroll-percentage" id="scrollPercentage">0%</span>
+    </button>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-play-circle"></i> KNR SPORTVERSE</h3>
+                <p>Your Ultimate Sports Entertainment Platform</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4><i class="fas fa-envelope"></i> Contact Us</h4>
+                <p>📧 Email: <a href="mailto:knrsportverse@gmail.com">knrsportverse@gmail.com</a></p>
+            </div>
+
+            <div class="footer-section">
+                <h4><i class="fas fa-link"></i> Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 KNR SPORTVERSE. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Feed Data
+        const feedData = [
+            {
+                id: 1,
+                image: 'https://i.pinimg.com/originals/25/cd/ff/25cdff24ab518ec9712f2f69fa0b3cfb.jpg',
+                name: 'Indian Premier League (IPL)',
+                description: 'TATA IPL 2026',
+                status: 'Live',
+                icon: 'fa-fire',
+                link: 'https://knrsportverse.blogspot.com/2026/04/knr-sportverse.html',
+                time: 'Live Now'
+            },
+            {
+                id: 2,
+                image: 'https://www.seekpng.com/png/detail/249-2496814_psl-official-logo-pakistan-super-league-logo.png',
+                name: 'Pakistan Super League (PSL)',
+                description: 'PSL 2026',
+                status: 'Live',
+                icon: 'fa-fire',
+                link: 'https://knrsportverse.blogspot.com/2026/04/psl-live.html',
+                time: 'Live Now'
+            }
+        ];
+
+        console.log('✓ feedData initialized:', feedData.length, 'items');
+
+        let currentFilter = 'all';
+
+        // Function to toggle dark/light mode
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.querySelector('.theme-toggle-btn i');
+            
+            if (!body || !themeBtn) {
+                console.error('Theme toggle elements not found');
+                return;
+            }
+            
+            body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeBtn.classList.remove('fa-sun');
+                themeBtn.classList.add('fa-moon');
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeBtn.classList.remove('fa-moon');
+                themeBtn.classList.add('fa-sun');
+            }
+        }
+
+        // Load saved theme on page load
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const body = document.body;
+            const themeBtn = document.querySelector('.theme-toggle-btn i');
+            
+            if (!body || !themeBtn) {
+                console.error('Theme elements not found on load');
+                return;
+            }
+            
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-mode');
+                themeBtn.classList.remove('fa-sun');
+                themeBtn.classList.add('fa-moon');
+            }
+        }
+
+        // Function to render feed cards
+        function renderFeed(filter = 'all') {
+            console.log('📢 renderFeed called with filter:', filter);
+            
+            const feedContent = document.getElementById('feed-content');
+            
+            // CRITICAL FIX: Validate DOM element exists
+            if (!feedContent) {
+                console.error('❌ CRITICAL ERROR: feed-content element not found in DOM!');
+                console.log('Available IDs in document:', Array.from(document.querySelectorAll('[id]')).map(el => el.id));
+                return;
+            }
+            
+            // Validate feedData exists
+            if (!feedData || feedData.length === 0) {
+                console.error('❌ feedData is empty or undefined');
+                feedContent.innerHTML = '<div class="empty-feed"><i class="fas fa-inbox"></i><p>No feed data available</p></div>';
+                return;
+            }
+            
+            feedContent.innerHTML = '';
+
+            let filteredData = feedData;
+            
+            if (filter === 'live') {
+                filteredData = feedData.filter(item => item.status === 'Live');
+                console.log('🔴 Live filter applied:', filteredData.length, 'items');
+            } else if (filter === 'upcoming') {
+                filteredData = feedData.filter(item => item.status === 'Upcoming');
+                console.log('⏰ Upcoming filter applied:', filteredData.length, 'items');
+            } else {
+                console.log('📋 All filter applied:', filteredData.length, 'items');
+            }
+
+            if (filteredData.length === 0) {
+                console.warn('⚠️ No items to display for filter:', filter);
+                feedContent.innerHTML = '<div class="empty-feed"><i class="fas fa-inbox"></i><p>No events available for this filter</p></div>';
+                return;
+            }
+
+            filteredData.forEach((item, index) => {
+                try {
+                    const card = createFeedCard(item);
+                    if (card) {
+                        card.style.animationDelay = `${index * 0.08}s`;
+                        feedContent.appendChild(card);
+                    }
+                } catch (error) {
+                    console.error('❌ Error creating card for item:', item.id, error);
+                }
+            });
+            
+            console.log('✓ Rendered', filteredData.length, 'cards successfully');
+        }
+
+        // Function to create individual feed card
+        function createFeedCard(data) {
+            // Validate data object
+            if (!data || !data.id) {
+                console.error('❌ Invalid card data:', data);
+                return null;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'feed-card';
+
+            const statusClass = data.status === 'Live' ? 'status-live' : 'status-upcoming';
+            const statusIcon = data.status === 'Live' ? 'fa-circle' : 'fa-hourglass-end';
+
+            try {
+                card.innerHTML = `
+                    <div class="feed-card-image-wrapper">
+                        <img src="${data.image}" alt="${data.name}" class="feed-card-image" onerror="this.src='https://via.placeholder.com/500x300?text=${encodeURIComponent(data.name)}'">
+                        <div class="feed-card-status-badge ${statusClass}">
+                            <i class="fas ${statusIcon}"></i>
+                            ${data.status}
+                        </div>
+                    </div>
+                    <div class="feed-card-content">
+                        <h3 class="feed-card-name">
+                            <i class="fas ${data.icon}"></i>
+                            ${data.name}
+                        </h3>
+                        <p class="feed-card-description">${data.description}</p>
+                        <div class="feed-card-info">
+                            <span><i class="fas fa-clock"></i> ${data.time}</span>
+                        </div>
+                        <button class="feed-card-link-btn" onclick="openLink('${data.link}')">
+                            <i class="fas fa-arrow-right"></i>
+                            Watch Now
+                        </button>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('❌ Error setting innerHTML for card:', error);
+                return null;
+            }
+
+            return card;
+        }
+
+        // Function to filter feed - FIXED with proper event handling
+        function filterFeed(filter, button) {
+            console.log('🔽 filterFeed called:', filter);
+            
+            if (!button) {
+                console.error('❌ Filter button element not provided');
+                return;
+            }
+            
+            currentFilter = filter;
+            
+            // Update active button
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+            
+            renderFeed(filter);
+            
+            // Smooth scroll to feed
+            const feedHeader = document.querySelector('.feed-header');
+            if (feedHeader) {
+                feedHeader.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Function to open link in new tab
+        function openLink(url) {
+            if (!url) {
+                console.error('❌ No URL provided');
+                return;
+            }
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        // Scroll to top function
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Update scroll progress
+        function updateScrollProgress() {
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            const scrollPercentage = document.getElementById('scrollPercentage');
+            
+            if (!scrollTopBtn || !scrollPercentage) {
+                return;
+            }
+            
+            const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = window.scrollY;
+            const scrollPercent = windowHeight > 0 ? (scrolled / windowHeight) * 100 : 0;
+            
+            // Show/hide button
+            if (scrollPercent > 10) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+            
+            // Update percentage text
+            scrollPercentage.textContent = Math.round(scrollPercent) + '%';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 DOM Content Loaded - Initializing...');
+            loadTheme();
+            renderFeed();
+            console.log('✓ Initialization complete');
+        });
+
+        // Add scroll event listener
+        window.addEventListener('scroll', updateScrollProgress);
+
+        // Auto-refresh feed every 5 minutes
+        setInterval(() => {
+            console.log('🔄 Auto-refreshing feed...');
+            renderFeed(currentFilter);
+        }, 300000);
+    </script>
+</body>
+</html>
