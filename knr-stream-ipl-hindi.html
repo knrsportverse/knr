@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KNR SPORTVERSE | IPL HINDI</title>
+  <title>IPL Live</title>
+
+  <!-- HLS.js -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
   <style>
     *{
@@ -18,17 +21,20 @@
       height:100%;
       background:#000;
       overflow:hidden;
+      font-family:Arial, sans-serif;
     }
 
-    iframe{
+    #video{
       position:fixed;
       top:0;
       left:0;
       width:100vw;
       height:100vh;
-      border:none;
+      object-fit:cover;
+      background:#000;
     }
 
+    /* Top Right Logo */
     .logo{
       position:fixed;
       top:10px;
@@ -41,22 +47,72 @@
       width:100%;
       display:block;
     }
+
+    /* LIVE Badge */
+    .live{
+      position:fixed;
+      top:10px;
+      left:10px;
+      z-index:9999;
+      background:red;
+      color:#fff;
+      padding:6px 12px;
+      border-radius:4px;
+      font-size:14px;
+      font-weight:bold;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Right Top Logo -->
-  <a class="logo" href="#">
-    <img src="YOUR_LOGO.png" alt="Logo">
-  </a>
+  <!-- LIVE Badge -->
+  <div class="live">LIVE</div>
+
+  <!-- Logo -->
+  <div class="logo">
+    <img src="logo.png" alt="Logo">
+  </div>
 
   <!-- Video -->
-  <iframe
-    src="https://cleaners-creations-try-propose.trycloudflare.com/live/951117/ipl2026/hindi/live_stream.m3u8"
-    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-    allowfullscreen>
-  </iframe>
+  <video
+    id="video"
+    autoplay
+    muted
+    controls
+    playsinline>
+  </video>
+
+  <script>
+    const video = document.getElementById('video');
+
+    const videoSrc =
+      'https://cleaners-creations-try-propose.trycloudflare.com/live/951117/ipl2026/hindi/live_stream.m3u8';
+
+    if (Hls.isSupported()) {
+
+      const hls = new Hls();
+
+      hls.loadSource(videoSrc);
+
+      hls.attachMedia(video);
+
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        video.play();
+      });
+
+    }
+
+    else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+
+      video.src = videoSrc;
+
+      video.addEventListener('loadedmetadata', function () {
+        video.play();
+      });
+
+    }
+  </script>
 
 </body>
 </html>
