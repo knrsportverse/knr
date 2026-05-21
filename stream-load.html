@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stream</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #050505;
+    }
+
+    /* Custom Video Player Container */
+    .video-player {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      background: #0a0a0a;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Central Content Area */
+    .player-center-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      z-index: 2;
+      padding: 20px;
+    }
+
+    /* Vertical Line Loop Loading Animation */
+    .loader-line {
+      width: 4px;
+      height: 45px;
+      background: #ffffff;
+      border-radius: 2px;
+      margin-bottom: 15px;
+      animation: lineGrow 1.2s infinite ease-in-out;
+    }
+
+    @keyframes lineGrow {
+      0%, 100% {
+        transform: scaleY(0.2);
+        opacity: 0.3;
+      }
+      50% {
+        transform: scaleY(1);
+        opacity: 1;
+      }
+    }
+
+    /* Brand Text */
+    .brand-title {
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin: 0 0 12px 0;
+    }
+
+    /* Error / Status Message */
+    .status-message {
+      color: #ff4d4d; /* Red color */
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0 0 15px 0;
+      max-width: 400px;
+      line-height: 1.4;
+    }
+
+    /* Small Website Link */
+    .website-link {
+      color: #3b82f6; /* Blue color */
+      font-size: 12px; /* Small text */
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s, text-decoration 0.2s;
+    }
+
+    .website-link:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    /* Custom Styled Video Player Controller Bar */
+    .player-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    /* SVG Icon Styling */
+    .control-icon {
+      width: 20px;
+      height: 20px;
+      fill: rgba(255, 255, 255, 0.75);
+      cursor: pointer;
+      transition: fill 0.2s, transform 0.1s;
+    }
+
+    .control-icon:hover {
+      fill: #ffffff;
+    }
+
+    .control-icon:active {
+      transform: scale(0.95);
+    }
+
+    /* Time Display String */
+    .time-display {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 13px;
+      font-weight: 500;
+      user-select: none;
+    }
+
+    /* Progress Bar UI */
+    .progress-bar-container {
+      position: absolute;
+      top: -4px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: #ff4d4d;
+    }
+
+    .right-controls {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Custom Video Player Interface -->
+    <div class="video-player">
+      
+      <!-- Central Notification & Loader -->
+      <div class="player-center-content">
+        <div class="loader-line"></div>
+        <h1 class="brand-title">KNR</h1>
+        <p class="status-message">The stream has not started yet. Please switch to another stream server.</p>
+        <a href="https://knrsportverse.blogspot.com" target="_blank" class="website-link">https://knrsportverse.blogspot.com</a>
+      </div>
+
+      <!-- Video Player Control Bar UI -->
+      <div class="player-controls">
+        <div class="progress-bar-container">
+          <div class="progress-bar"></div>
+        </div>
+        
+        <div class="control-group">
+          <!-- Play Icon -->
+          <svg class="control-icon" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <div class="time-display">00:00 / 00:00</div>
+        </div>
+        
+        <div class="right-controls">
+          <!-- Volume Icon -->
+          <svg class="control-icon" viewBox="0 0 24 24">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+          </svg>
+          
+          <!-- Settings Icon -->
+          <svg class="control-icon" viewBox="0 0 24 24">
+            <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l-.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3-1.07-3-3s1.07-3 3-3 3 1.07 3 3-1.07 3-3 3z"/>
+          </svg>
+          
+          <!-- Fullscreen Icon -->
+          <svg class="control-icon" viewBox="0 0 24 24">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
