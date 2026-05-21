@@ -15,6 +15,7 @@
       overflow: hidden;
     }
 
+    /* Centers the 16:9 container perfectly on the screen */
     .container {
       width: 100%;
       height: 100%;
@@ -22,21 +23,27 @@
       justify-content: center;
       align-items: center;
       background: #050505;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    /* Custom Video Player Container */
+    /* Fixed 16:9 Aspect Ratio Video Player Container */
     .video-player {
       position: relative;
       width: 100%;
-      height: 100%;
-      max-width: 100%;
-      max-height: 100%;
+      aspect-ratio: 16 / 9;
+      /* Ensures container doesn't overflow viewport bounds */
+      max-width: calc(100vh * 16 / 9 - 40px); 
+      max-height: calc(100vw * 9 / 16 - 40px);
       background: #0a0a0a;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
     }
 
     /* Central Content Area */
@@ -49,20 +56,33 @@
       padding: 20px;
     }
 
-    /* Vertical Line Loop Loading Animation */
-    .loader-line {
-      width: 4px;
-      height: 45px;
-      background: #ffffff;
-      border-radius: 2px;
+    /* Premium Vertical Line Loop Loading Animation */
+    .loader-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 50px;
       margin-bottom: 15px;
-      animation: lineGrow 1.2s infinite ease-in-out;
     }
 
-    @keyframes lineGrow {
+    .loader-line {
+      width: 3px;
+      height: 40px;
+      background: #ffffff;
+      border-radius: 2px;
+      animation: verticalGrow 1s infinite ease-in-out;
+    }
+
+    /* Creating a shifting vertical loop effect */
+    .loader-line:nth-child(1) { animation-delay: -0.2s; }
+    .loader-line:nth-child(2) { animation-delay: 0s; }
+    .loader-line:nth-child(3) { animation-delay: -0.2s; }
+
+    @keyframes verticalGrow {
       0%, 100% {
-        transform: scaleY(0.2);
-        opacity: 0.3;
+        transform: scaleY(0.3);
+        opacity: 0.4;
       }
       50% {
         transform: scaleY(1);
@@ -73,26 +93,26 @@
     /* Brand Text */
     .brand-title {
       color: #ffffff;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
-      letter-spacing: 2px;
-      margin: 0 0 12px 0;
+      letter-spacing: 3px;
+      margin: 0 0 14px 0;
     }
 
-    /* Error / Status Message */
+    /* Grammatically Correct Status Message */
     .status-message {
-      color: #ff4d4d; /* Red color */
-      font-size: 16px;
+      color: #ff4d4d; /* Pure Red */
+      font-size: 15px;
       font-weight: 500;
       margin: 0 0 15px 0;
-      max-width: 400px;
+      max-width: 450px;
       line-height: 1.4;
     }
 
     /* Small Website Link */
     .website-link {
-      color: #3b82f6; /* Blue color */
-      font-size: 12px; /* Small text */
+      color: #3b82f6; /* Pure Blue */
+      font-size: 12px; /* Small Text Size */
       text-decoration: none;
       opacity: 0.8;
       transition: opacity 0.2s, text-decoration 0.2s;
@@ -103,59 +123,55 @@
       text-decoration: underline;
     }
 
-    /* Custom Styled Video Player Controller Bar */
+    /* Custom Video Player Controller Bar */
     .player-controls {
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 50px;
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+      height: 46px;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.95));
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
+      padding: 0 15px;
       box-sizing: border-box;
     }
 
     .control-group {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 15px;
     }
 
-    /* SVG Icon Styling */
+    /* Crisp Responsive SVG Controls */
     .control-icon {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       fill: rgba(255, 255, 255, 0.75);
       cursor: pointer;
-      transition: fill 0.2s, transform 0.1s;
+      transition: fill 0.2s;
     }
 
     .control-icon:hover {
       fill: #ffffff;
     }
 
-    .control-icon:active {
-      transform: scale(0.95);
-    }
-
-    /* Time Display String */
+    /* Time Interface String */
     .time-display {
-      color: rgba(255, 255, 255, 0.75);
-      font-size: 13px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 12px;
       font-weight: 500;
       user-select: none;
     }
 
-    /* Progress Bar UI */
+    /* Progress Tracker Base */
     .progress-bar-container {
       position: absolute;
-      top: -4px;
+      top: -3px;
       left: 0;
       width: 100%;
-      height: 4px;
+      height: 3px;
       background: rgba(255, 255, 255, 0.15);
     }
 
@@ -168,25 +184,29 @@
     .right-controls {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 15px;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- Custom Video Player Interface -->
+    <!-- Responsive 16:9 Video Player -->
     <div class="video-player">
       
-      <!-- Central Notification & Loader -->
+      <!-- Central Elements: Vertical Loader, Brand & Error Messaging -->
       <div class="player-center-content">
-        <div class="loader-line"></div>
+        <div class="loader-container">
+          <div class="loader-line"></div>
+          <div class="loader-line"></div>
+          <div class="loader-line"></div>
+        </div>
         <h1 class="brand-title">KNR</h1>
         <p class="status-message">The stream has not started yet. Please switch to another stream server.</p>
         <a href="https://knrsportverse.blogspot.com" target="_blank" class="website-link">https://knrsportverse.blogspot.com</a>
       </div>
 
-      <!-- Video Player Control Bar UI -->
+      <!-- Custom Player Navigation Controls -->
       <div class="player-controls">
         <div class="progress-bar-container">
           <div class="progress-bar"></div>
