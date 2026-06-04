@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPTV Playlist Player (URL Loader)</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --panel-bg: #1e1e1e;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --accent: #00adb5;
+            --accent-hover: #007a80;
+            --border: #333333;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            padding: 15px 20px;
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Left Side: Video Player */
+        .player-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-right: 1px solid var(--border);
+        }
+
+        .video-container {
+            width: 100%;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        video { width: 100%; height: 100%; outline: none; }
+
+        .info-panel {
+            margin-top: 20px;
+            background-color: var(--panel-bg);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .info-panel h2 { margin-bottom: 10px; font-size: 1.2rem; }
+        
+        .link-copier { display: flex; gap: 10px; margin-top: 10px; }
+        
+        .link-copier input {
+            flex: 1;
+            padding: 10px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        button:hover { background-color: var(--accent-hover); }
+        button:disabled { background-color: #555; cursor: not-allowed; }
+
+        /* Right Side: Playlist Sidebar */
+        .playlist-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background-color: var(--panel-bg);
+            min-width: 350px;
+        }
+
+        .input-area {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-area input[type="url"] {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .channel-list {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: var(--bg-color);
+        }
+
+        .channel-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            word-wrap: break-word;
+            font-size: 0.95rem;
+        }
+
+        .channel-item:hover { background-color: #2a2a2a; }
+        .channel-item.active { background-color: var(--accent); color: #fff; font-weight: bold; }
+        .channel-item:last-child { border-bottom: none; }
+
+        .status-msg {
+            padding: 20px;
+            color: var(--text-muted);
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Responsive Breakpoint */
+        @media (max-width: 900px) {
+            .container { flex-direction: column; overflow: auto; }
+            .player-section { border-right: none; border-bottom: 1px solid var(--border); }
+            .playlist-section { min-height: 400px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>IPTV Live Playlist Player</h1>
+    </header>
+
+    <div class="container">
+        <div class="player-section">
+            <div class="video-container">
+                <video id="video-player" controls></video>
+            </div>
+            
+            <div class="info-panel">
+                <h2>Now Playing: <span id="current-channel-name" style="color: var(--accent);">None</span></h2>
+                <label style="font-size: 0.85rem; color: var(--text-muted);">Active .m3u8 Stream Link:</label>
+                <div class="link-copier">
+                    <input type="text" id="current-link" readonly placeholder="Select a channel to generate link...">
+                    <button id="copy-btn">Copy Link</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="playlist-section">
+            <div class="input-area">
+                <label for="m3u-url"><strong>Paste IPTV Playlist URL (.m3u):</strong></label>
+                <input type="url" id="m3u-url" value="https://iptv-org.github.io/iptv/categories/sports.m3u" placeholder="https://example.com/playlist.m3u">
+                <button id="load-btn">Load URL</button>
+            </div>
+            
+            <div class="channel-list" id="channel-list">
+                <div class="status-msg">Click "Load URL" to fetch the channel directory.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Element Elements
+        const m3uUrlInput = document.getElementById('m3u-url');
+        const loadBtn = document.getElementById('load-btn');
+        const channelListEl = document.getElementById('channel-list');
+        const video = document.getElementById('video-player');
+        const currentChannelNameEl = document.getElementById('current-channel-name');
+        const currentLinkEl = document.getElementById('current-link');
+        const copyBtn = document.getElementById('copy-btn');
+
+        let hlsPlayer = null;
+
+        // 1. Asynchronous Fetch & Stream Processor
+        async function fetchAndLoadPlaylist(url) {
+            updateStatus("Fetching playlist data, please wait...");
+            loadBtn.disabled = true;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Server returned status code: ${response.status}`);
+                }
+                const rawText = await response.text();
+                const channels = parseM3U(rawText);
+                renderPlaylist(channels);
+            } catch (error) {
+                console.error("CORS or Network Error:", error);
+                updateStatus(`Error loading playlist. Make sure the link is valid and supports CORS requests.`);
+            } finally {
+                loadBtn.disabled = false;
+            }
+        }
+
+        // 2. Comprehensive M3U Document Parser
+        function parseM3U(rawText) {
+            // Handles both Windows (\r\n) and Unix (\n) line breaks smoothly
+            const lines = rawText.split(/\r?\n/);
+            const channels = [];
+            let currentChannel = null;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+
+                if (line.startsWith('#EXTINF:')) {
+                    const commaIndex = line.lastIndexOf(',');
+                    const name = commaIndex !== -1 ? line.substring(commaIndex + 1).trim() : 'Unnamed Channel';
+                    currentChannel = { name };
+                } 
+                else if (line && !line.startsWith('#')) {
+                    if (currentChannel) {
+                        currentChannel.url = line;
+                        channels.push(currentChannel);
+                        currentChannel = null; // Flush back to find next pair
+                    }
+                }
+            }
+            return channels;
+        }
+
+        // 3. Batch Render Channel List (Optimized performance for big files)
+        function renderPlaylist(channels) {
+            channelListEl.innerHTML = ''; 
+
+            if (channels.length === 0) {
+                updateStatus("No active media streams found inside this file.");
+                return;
+            }
+
+            // Using a fragment minimizes page layout thrashing during heavy processing
+            const fragment = document.createDocumentFragment();
+
+            channels.forEach(channel => {
+                const div = document.createElement('div');
+                div.className = 'channel-item';
+                div.textContent = channel.name;
+                
+                div.addEventListener('click', () => {
+                    playStream(channel.url, channel.name, div);
+                });
+
+                fragment.appendChild(div);
+            });
+
+            channelListEl.appendChild(fragment);
+        }
+
+        // 4. Live HLS Video Rendering Engine
+        function playStream(url, name, element) {
+            currentChannelNameEl.textContent = name;
+            currentLinkEl.value = url;
+
+            // Shift element highlight status
+            document.querySelectorAll('.channel-item').forEach(el => el.classList.remove('active'));
+            if (element) element.classList.add('active');
+
+            // Standard Hls.js fallback compilation logic
+            if (Hls.isSupported()) {
+                if (hlsPlayer) { hlsPlayer.destroy(); }
+                
+                hlsPlayer = new Hls();
+                hlsPlayer.loadSource(url);
+                hlsPlayer.attachMedia(video);
+                
+                hlsPlayer.on(Hls.Events.MANIFEST_PARSED, () => {
+                    video.play().catch(err => console.log("Playback delayed due to user interaction policies.", err));
+                });
+            } 
+            // Built-in parser check for iOS Safari environments
+            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.addEventListener('loadedmetadata', () => {
+                    video.play().catch(err => console.log("Autoplay context warning.", err));
+                });
+            } else {
+                alert("This browser cannot parse live HLS content.");
+            }
+        }
+
+        // Helper UI State Tracker
+        function updateStatus(msg) {
+            channelListEl.innerHTML = `<div class="status-msg">${msg}</div>`;
+        }
+
+        // 5. Clipboard Action Handler
+        copyBtn.addEventListener('click', () => {
+            if (!currentLinkEl.value) return;
+            
+            currentLinkEl.select();
+            navigator.clipboard.writeText(currentLinkEl.value).then(() => {
+                const baseLabel = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                copyBtn.style.backgroundColor = '#28a745';
+                
+                setTimeout(() => {
+                    copyBtn.textContent = baseLabel;
+                    copyBtn.style.backgroundColor = 'var(--accent)';
+                }, 1500);
+            }).catch(err => console.error('Clipboard action blocked: ', err));
+        });
+
+        // Application Click Bindings
+        loadBtn.addEventListener('click', () => {
+            const targetUrl = m3uUrlInput.value.trim();
+            if(targetUrl) fetchAndLoadPlaylist(targetUrl);
+        });
+
+        // Run automatically with your specified link on startup
+        fetchAndLoadPlaylist(m3uUrlInput.value.trim());
+    </script>
+</body>
+</html>
