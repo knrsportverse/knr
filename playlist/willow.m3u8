@@ -1,0 +1,17 @@
+#EXTM3U
+#EXT-X-TARGETDURATION:4
+#EXT-X-VERSION:3
+#EXT-X-MEDIA-SEQUENCE:23518
+#EXT-X-PROGRAM-DATE-TIME:2026-06-10T08:05:27.732Z
+#EXTINF:4.000,
+https://zampikakis.shop/ingest/9ee3e4ce-3f92-4372-9845-c803c6d134f9.zst
+#EXTINF:4.000,
+https://zampikakis.shop/ingest/e8e04c18-a2c5-4f2a-aef7-6924258af8cc.png
+#EXTINF:4.000,
+https://zampikakis.shop/ingest/adfaddb1-185c-4e5e-b98b-01aed97d4298.zst
+#EXTINF:4.000,
+https://zampikakis.shop/ingest/7dbabbb7-6126-40a3-b12f-7d6e6fb4609a.zst
+#EXTINF:4.000,
+https://zampikakis.shop/ingest/fe84f545-c715-409f-9054-d26a0fd19e3e.pdf
+#EXTINF:4.000,
+https://zampikakis.shop/ingest/6a037de4-6879-40fd-8965-a246729fe348.js
